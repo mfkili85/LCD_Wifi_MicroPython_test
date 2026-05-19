@@ -9,13 +9,14 @@ from pico_i2c_lcd import I2cLcd
 SSID = "Pico2W_LCD_Control"
 PASSWORD = "password123"  # Minimum 8 characters
 
-# I2C Setup (GP0 = SDA, GP1 = SCL)
-i2c = I2C(0, sda=Pin(0), scl=Pin(1), freq=400000)
+sda = machine.Pin(0, machine.Pin.IN, machine.Pin.PULL_UP)
+scl = machine.Pin(1, machine.Pin.IN, machine.Pin.PULL_UP)
+i2c = machine.I2C(0, sda=sda, scl=scl, freq=100000)
+
 
 # Scan for LCD address
 try:
-    I2C_ADDR = i2c.scan()[0]
-    lcd = I2cLcd(i2c, I2C_ADDR, 2, 16)
+    lcd = I2cLcd(i2c, 39, 2, 16)
 except IndexError:
     print("LCD not found. Check wiring!")
     machine.reset()
